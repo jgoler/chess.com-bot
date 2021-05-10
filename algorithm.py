@@ -1,19 +1,43 @@
 #the board is 7 long by 6 high
 
-gameboard = [[0, 0, 0, 0, 0, 0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+gameboard = [[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0]]
 
 def winner_exists(gameboard):
-	row = 0
-	while (row < 6):
-		print("here in while (row < 6):")
-		if int(gameboard[row][0]) == int(gameboard[row][1]) == int(gameboard[row][2]) == int(gameboard[row][3]) and int(gameboard[row][3]) != 0:
-			return True
-		elif int(gameboard[row][1]) == int(gameboard[row][2]) == int(gameboard[row][3]) == int(gameboard[row][4]) and int(gameboard[row][4]) != 0:
-			return True
-		elif int(gameboard[row][2]) == int(gameboard[row][3]) == int(gameboard[row][4]) == int(gameboard[row][5]) and int(gameboard[row][5]) != 0:
-			return True
-		row += 1
-	return False
+    row = 0
+    x_value = 0
+    while (row < 6 and x_value < 4):
+        print("horizontal check")
+        if (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 1])) and (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 2])) and (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 3])) and (int(gameboard[row][x_value]) != 0):
+            return True
+        row += 1
+        x_value += 1   
+    row = 0
+    x_value = 0
+    while (row < 3 and x_value < 7):
+        print("vertical check")
+        if (int(gameboard[row][x_value]) == int(gameboard[row + 1][x_value])) and (int(gameboard[row][x_value]) == int(gameboard[row + 2][x_value])) and (int(gameboard[row][x_value]) == int(gameboard[row + 3][x_value])) and (int(gameboard[row][x_value]) != 0):
+            return True
+        if (row == 2 and x_value != 6):
+            x_value += 1
+            row = 0
+        else:
+            row += 1
+    row = 0
+    x_value = 0
+    while (row < 3 and x_value < 7):
+        print("diagonal check")
+        if (x_value < 4):
+            if (int(gameboard[row][x_value]) == int(gameboard[row + 1][x_value + 1])) and (int(gameboard[row][x_value]) == int(gameboard[row + 2][x_value + 2])) and (int(gameboard[row][x_value]) == int(gameboard[row + 3][x_value + 3])) and (int(gameboard[row][x_value]) != 0):
+                return True
+        if (x_value > 2):
+            if (int(gameboard[row][x_value]) == int(gameboard[row + 1][x_value - 1])) and (int(gameboard[row][x_value]) == int(gameboard[row + 2][x_value - 2])) and (int(gameboard[row][x_value]) == int(gameboard[row + 3][x_value - 3])) and (int(gameboard[row][x_value]) != 0):
+                return True
+        if (x_value < 6):
+            x_value += 1  
+        else:
+            row += 1
+            x_value = 0
+    return False
 
 def play(gameboard, first):
 	print("here")
