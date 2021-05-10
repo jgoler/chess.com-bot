@@ -1,5 +1,4 @@
 #the board is 7 long by 6 high
-
 gameboard = [[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0]]
 
 def winner_exists(gameboard):
@@ -9,8 +8,12 @@ def winner_exists(gameboard):
         print("horizontal check")
         if (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 1])) and (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 2])) and (int(gameboard[row][x_value]) == int(gameboard[row][x_value + 3])) and (int(gameboard[row][x_value]) != 0):
             return True
-        row += 1
-        x_value += 1   
+        if (x_value == 3):
+            x_value = 0
+            row += 1
+        else:
+            x_value += 1  
+        
     row = 0
     x_value = 0
     while (row < 3 and x_value < 7):
@@ -38,6 +41,7 @@ def winner_exists(gameboard):
             row += 1
             x_value = 0
     return False
+
 
 def play(gameboard, first):
 	print("here")
