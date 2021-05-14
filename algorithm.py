@@ -1,4 +1,6 @@
+import copy
 #the board is 7 long by 6 high
+#our player uses 1 and their player uses 2 to indicate that the spot is theirs
 gameboard = [[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0]]
 
 def winner_exists(gameboard):
@@ -83,3 +85,37 @@ def test(gameboard):
 print_board(gameboard)
 play(gameboard, 1)
 print(winner_exists(gameboard))
+
+
+def find_children(state, current_player):
+    children = []
+    for x in range(len(state))[::-1]:
+        for y in range(len(state[x])):
+            if (state[x][y] == 0):
+                new_state = copy.deepcopy(state)
+                new_state[x][y] = current_player
+                children.append(new_state)
+    return children
+
+def heuristic(state):
+    #figure out number of fours in a row for one player
+    
+    #figure out number of threes in a row for one player
+    #figure out number of twos in a row for one player
+    #do same for other player and subtract
+#state is current state, depth is amount of moves we want to search, and maximizingPlayer tells us if we ar enemy or not
+def minimax(state, depth, maximizingPlayer):
+    if (depth == 0) or (winner_exists(state)):
+        return heuristic(state) 
+    if maximizingPlayer:
+        maxEval = -infinity
+        for x in find_children(state, 1):
+            eval = minimax(child, depth - 1, false)
+            maxEval = max(maxEval, eval)
+        return maxEval
+    else:
+        minEval = +infinity
+        for y in find_children(state, 0):
+            eval = minimax(child, depth-1, true)
+            minEval = min(minEval, eval)
+        return minEval
