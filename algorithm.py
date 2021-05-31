@@ -1,6 +1,8 @@
+from _typeshed import ReadableBuffer
 import copy
+import sys
 #the board is 7 long by 6 high
-#our player uses 1 and their player uses 2 to indicate that the spot is theirs
+#red = 1, yellow = 2
 gameboard = [[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0]]
 
 def winner_exists(gameboard):
@@ -14,7 +16,6 @@ def winner_exists(gameboard):
             row += 1
         else:
             x_value += 1  
-        
     row = 0
     x_value = 0
     while (row < 3 and x_value < 7):
@@ -98,24 +99,35 @@ def find_children(state, current_player):
     return children
 
 def heuristic(state):
-    #figure out number of fours in a row for one player
-    
-    #figure out number of threes in a row for one player
-    #figure out number of twos in a row for one player
+    #make sure that it is possible to make a four out of the tiles that are in a row
+    #figure out number of twos in a row that are possible to create into a four in a row
+    #figure out number of threes in a row that are possible to create into a four in a row
     #do same for other player and subtract
-#state is current state, depth is amount of moves we want to search, and maximizingPlayer tells us if we ar enemy or not
-def minimax(state, depth, maximizingPlayer):
+    x = 0
+    while (row < len(state)):
+        if (x > 3):
+            x = 0
+            row += 1
+        else:
+            for i in range(x, x + 5):
+                #check if a four can be created from here, and then also check whether to count what is already there as a three, two, or nothing
+#state is current state, depth is amount of moves we want to search, and isMaximizingPlayer tells us if we are red or not
+def minimax(state, depth, isMaximizingPlayer):
+    color = 0
+    if isMaximizingPlayer:
+        #red
+        color = 1
     if (depth == 0) or (winner_exists(state)):
         return heuristic(state) 
-    if maximizingPlayer:
+    if isMaximizingPlayer:
         maxEval = -infinity
-        for x in find_children(state, 1):
+        for x in find_children(state, color):
             eval = minimax(child, depth - 1, false)
             maxEval = max(maxEval, eval)
         return maxEval
     else:
         minEval = +infinity
-        for y in find_children(state, 0):
+        for y in find_children(state, color):
             eval = minimax(child, depth-1, true)
             minEval = min(minEval, eval)
         return minEval
