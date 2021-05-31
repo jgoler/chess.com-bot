@@ -3,6 +3,7 @@ import copy
 import sys
 #the board is 7 long by 6 high
 #red = 1, yellow = 2
+#maximizing player is always red
 gameboard = [[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0]]
 
 def winner_exists(gameboard):
@@ -104,13 +105,36 @@ def heuristic(state):
     #figure out number of threes in a row that are possible to create into a four in a row
     #do same for other player and subtract
     x = 0
-    while (row < len(state)):
-        if (x > 3):
+    row = 0
+    #all current maxes summed
+    running_total = 0
+    runningValue = 0
+    currentMax = 0
+    while (x < 4 and row < len(state)): 
+        for i in range(x, x + 4):
+            if (i == x):
+                currentMax = 1
+                runningValue = state[row][i]
+                continue
+            if (state[row][i] == runningValue):
+                currentMax += 1
+            else:
+                currentMax = 0
+                if (x == 3):
+                    x = 0
+                    row += 1
+                    break
+        if (currentMax != 0 and runningValue == 1):
+            running_total += currentMax
+        if (currentMax != 0 and runningValue == 2):
+            running_total -= currentMax
+        x += 1
+        if (x == 3):
             x = 0
             row += 1
-        else:
-            for i in range(x, x + 5):
-                #check if a four can be created from here, and then also check whether to count what is already there as a three, two, or nothing
+            currentMax = 0
+    return running_total
+
 #state is current state, depth is amount of moves we want to search, and isMaximizingPlayer tells us if we are red or not
 def minimax(state, depth, isMaximizingPlayer):
     color = 0
